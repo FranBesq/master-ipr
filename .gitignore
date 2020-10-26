@@ -35,6 +35,7 @@
 *~
 *.swp
 *.orig
+*.vscode/
 tags
 CMakeLists.txt.user
 **/build*/

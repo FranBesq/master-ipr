@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-#define DEFAULT_FILE "/usr/local/share/master-ipr/map1/map1.csv"
+#define DEFAULT_FILE "/home/francisco/intro_plan/master-ipr/map1/map1.csv"
 #define DEFAULT_START_X 2
 #define DEFAULT_START_Y 2
 #define DEFAULT_END_X 7
@@ -11,15 +11,16 @@
 class Node
 {
 public:
-    Node(int x,int y,int id,int parentId) {
+    Node(int x,int y,int id,int parentId, int score) {
       _x = x; _y = y;
       _id = id; _parentId = parentId;
+      _score = score;
     }
     void dump()
     {
-        printf("---------- x %d, y %d, id %d, pid %d\n",_x,_y,_id,_parentId);
+        printf("---------- x %d, y %d, id %d, pid %d\n",_x,_y,_id,_parentId, _score);
     }
-    int _x,_y,_id,_parentId;
+    int _x,_y,_id,_parentId, _score;
 };
 
 class Program
@@ -61,6 +62,12 @@ public:
         }
 
     }
+    /*Calculate score of a given node *
+      Score of a node = Manhattan distance to goal node*/
+    int getScore(int x, int y)
+    {
+    return  (x - DEFAULT_END_X) + abs(y - DEFAULT_END_Y));
+    }
 
     bool run()
     {
@@ -88,7 +95,7 @@ public:
         intMap[DEFAULT_END_X][DEFAULT_END_Y] = 4;
         this->dump();
 
-        Node* init = new Node(DEFAULT_START_X,DEFAULT_START_Y,0,-2);
+        Node* init = new Node(DEFAULT_START_X,DEFAULT_START_Y,0,-2, getScore(DEFAULT_START_X, DEFAULT_START_Y));
         nodes.push_back(init);
 
         bool done = false;
@@ -119,7 +126,7 @@ public:
                 else if( intMap[tmpX][tmpY] == 0 )
                 {
                     //printf("Create node\n");
-                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id);
+                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id, getScore(tmpX,tmpY));
                     intMap[tmpX][tmpY] = 2;
                     nodes.push_back(node);
                 }
@@ -138,7 +145,7 @@ public:
                 else if( intMap[tmpX][tmpY] == 0 )
                 {
                     //printf("Create node\n");
-                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id);
+                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id,getScore(tmpX,tmpY));
                     intMap[tmpX][tmpY] = 2;
                     nodes.push_back(node);
                 }
@@ -156,7 +163,7 @@ public:
                 else if( intMap[tmpX][tmpY] == 0 )
                 {
                     //printf("Create node\n");
-                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id);
+                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id, getScore(tmpX,tmpY));
                     intMap[tmpX][tmpY] = 2;
                     nodes.push_back(node);
                 }
@@ -174,7 +181,7 @@ public:
                 else if( intMap[tmpX][tmpY] == 0 )
                 {
                     //printf("Create node\n");
-                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id);
+                    Node* node = new Node(tmpX,tmpY,nodes.size(),nodes[nodeIdx]->_id, getScore(tmpX,tmpY));
                     intMap[tmpX][tmpY] = 2;
                     nodes.push_back(node);
                 }
