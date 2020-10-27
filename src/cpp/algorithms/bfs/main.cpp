@@ -1,12 +1,18 @@
 #include <vector>
+#include <iostream>
 #include <fstream>
 #include <sstream>
+#include <array>
+#include <stdlib.h> 
+#include <time.h>
+#include <chrono> 
+using namespace std::chrono; 
 
 #define DEFAULT_FILE "/home/francisco/intro_plan/master-ipr/map1/map1.csv"
-#define DEFAULT_START_X 2
-#define DEFAULT_START_Y 2
+#define DEFAULT_START_X 1
+#define DEFAULT_START_Y 1
 #define DEFAULT_END_X 7
-#define DEFAULT_END_Y 2
+#define DEFAULT_END_Y 5
 
 class Node
 {
@@ -18,7 +24,7 @@ public:
     }
     void dump()
     {
-        printf("---------- x %d, y %d, id %d, pid %d\n",_x,_y,_id,_parentId, _score);
+        printf("---------- x %d, y %d, id %d, pid %d\n",_x,_y,_id,_parentId);
     }
     int _x,_y,_id,_parentId, _score;
 };
@@ -66,7 +72,8 @@ public:
       Score of a node = Manhattan distance to goal node*/
     int getScore(int x, int y)
     {
-    return  (x - DEFAULT_END_X) + abs(y - DEFAULT_END_Y));
+        //return  (x - DEFAULT_END_X) + abs(y - DEFAULT_END_Y));
+        return 1;
     }
 
     bool run()
@@ -94,10 +101,10 @@ public:
         intMap[DEFAULT_START_X][DEFAULT_START_Y] = 3;
         intMap[DEFAULT_END_X][DEFAULT_END_Y] = 4;
         this->dump();
-
+        
         Node* init = new Node(DEFAULT_START_X,DEFAULT_START_Y,0,-2, getScore(DEFAULT_START_X, DEFAULT_START_Y));
         nodes.push_back(init);
-
+        auto start = high_resolution_clock::now();
         bool done = false;
 
         int goalParentId;
@@ -210,6 +217,9 @@ public:
             }
         }
 
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(stop - start);
+        std::cout << duration.count() << ": Tiempo de ejecucion\n";
         return true;
     } //--main
 
